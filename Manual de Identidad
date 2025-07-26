@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Interactivo - Manual de Identidad</title>
+  <style>
+    body {font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#fdf6e3,#f1edea);color:#333;margin:0;padding:0;display:flex;justify-content:center;align-items:center;height:100vh;}
+    .quiz-container {max-width:650px;width:95%;background:#fff;padding:30px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.15);text-align:center;position:relative;}
+    h2 {color:#c49b66;margin-bottom:10px;}
+    .tabs {display:flex;justify-content:space-around;margin-bottom:15px;}
+    .tab {cursor:pointer;padding:8px 12px;border-radius:8px;background:#f1edea;color:#555;font-weight:bold;transition:0.3s;}
+    .tab.active {background:#c49b66;color:#fff;}
+    .section-title {font-size:1.3rem;color:#a9814f;margin:10px 0;font-weight:bold;}
+    .question {font-size:1.1rem;margin:20px 0;font-weight:bold;}
+    textarea,select,input {width:100%;padding:10px;margin-top:5px;border:1px solid #ccc;border-radius:8px;font-size:1rem;}
+    .hint {font-size:0.9rem;color:#222;font-weight:bold;margin-top:5px;background:#f0f0f0;padding:6px 8px;border-left:4px solid #c49b66;border-radius:6px;}
+    .btn {background:#c49b66;color:#fff;border:none;padding:12px 20px;font-size:1rem;border-radius:8px;cursor:pointer;margin:10px 5px;transition:background 0.3s;}
+    .btn:hover {background:#a9814f;}
+    .progress {margin-top:10px;font-size:0.9rem;color:#666;}
+    .fade {animation: fadeIn 0.5s ease-in-out;}
+    @keyframes fadeIn {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    img.icon {width:40px;height:40px;margin-bottom:5px;}
+    .progress-bar {height:8px;width:100%;background:#eee;border-radius:5px;overflow:hidden;margin-top:5px;}
+    .progress-fill {height:100%;width:0;background:#c49b66;transition:width 0.4s ease;}
+  </style>
+</head>
+<body>
+<div class="quiz-container">
+  <h2>Manual de Identidad Interactivo</h2>
+  <div class="tabs" id="tabs"></div>
+  <div id="quiz" class="fade"></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <button class="btn" id="prevBtn">Atrás</button>
+  <button class="btn" id="nextBtn">Siguiente</button>
+  <div class="progress" id="progress"></div>
+</div>
+<script>
+  const botToken = '7609445234:AAHaIOs_atVGpS9dfD5VPpv5ohxW0dduMhQ';
+  const chatId = '929759981';
+
+  const sections = [
+    {title:"Fundamentos",icon:"https://cdn-icons-png.flaticon.com/512/1828/1828884.png"},
+    {title:"Público",icon:"https://cdn-icons-png.flaticon.com/512/747/747545.png"},
+    {title:"Estrategias",icon:"https://cdn-icons-png.flaticon.com/512/1087/1087927.png"},
+    {title:"Marketing",icon:"https://cdn-icons-png.flaticon.com/512/633/633611.png"}
+  ];
+
+  const questions = [
+    {section:0,q:"¿Cuál es la misión de tu salón?",name:"mision",hint:"Describe tu razón de ser. Ejemplo: Realzar la belleza y confianza con moños y pelucas en un ambiente personalizado."},
+    {section:0,q:"¿Cuál es la visión a futuro?",name:"vision",hint:"Imagina tu salón en 5 años. Ejemplo: Ser el referente nacional en moños y pelucas por calidad y confianza."},
+    {section:0,q:"Elige tus valores principales",name:"valores",options:["Calidad: Siempre ofrecer lo mejor","Innovación: Probar nuevas tendencias","Empatía: Escuchar a cada clienta","Confianza: Ser transparente","Creatividad: Diseños únicos","Profesionalismo: Trato experto"],multi:true},
+    {section:0,q:"¿Cómo quieres que te perciban tus clientas?",name:"percepcion",hint:"Ej: Como experta cercana y confiable que entiende sus necesidades."},
+    {section:0,q:"Describe tu estilo personal de atención",name:"estilo_atencion",hint:"Ej: Cercano y conversador, formal y respetuoso, siempre positivo."},
+    {section:0,q:"¿Por qué decidiste abrir este salón?",name:"motivo_salon",hint:"Ej: Pasión por ayudar a mujeres a sentirse seguras y hermosas."},
+    {section:0,q:"¿Qué historia personal te inspira en este trabajo?",name:"historia_personal",hint:"Ej: Una experiencia personal que te llevó a dedicarte a los moños y pelucas."},
+
+    {section:1,q:"Describe a tu cliente ideal (datos demográficos)",name:"demograficos",hint:"Ej: Mujeres de 25 a 50 años, profesionales urbanas."},
+    {section:1,q:"Motivaciones de compra",name:"motivaciones",options:["Eventos especiales: Bodas, fiestas","Expresión personal: Mostrar su estilo","Pérdida de cabello: Necesidad médica","Comodidad: Fácil de usar y cuidar"],multi:true},
+    {section:1,q:"¿Cuáles son sus intereses y estilo de vida?",name:"psicograficos",hint:"Ej: Aman la moda, siguen influencers, valoran calidad y discreción."},
+    {section:1,q:"¿Qué emociones busca al venir a tu salón?",name:"emociones",hint:"Ej: Confianza, sentirse especial, renovada."},
+    {section:1,q:"¿Qué problema principal quiere resolver tu cliente?",name:"problema_cliente",hint:"Ej: Necesita un look que le devuelva seguridad o cubrir pérdida de cabello."},
+    {section:1,q:"¿Qué tipo de clientas te recomiendan más?",name:"recomendadoras",hint:"Ej: Mujeres que quedaron felices con un cambio de look para un evento."},
+
+    {section:2,q:"¿Cuál es tu propuesta de valor única?",name:"pvu",hint:"¿Qué te hace diferente? Ej: Moños y pelucas tan naturales que nadie notará la diferencia."},
+    {section:2,q:"¿Cómo demuestras tu experiencia?",name:"experiencia",hint:"Ej: Mostrar antes y después, consejos personalizados, certificados."},
+    {section:2,q:"¿Qué problema resuelves principalmente?",name:"problema",hint:"Ej: Ayudo a mujeres a sentirse seguras con su imagen."},
+    {section:2,q:"¿Qué elementos sensoriales usas en tu salón?",name:"sensorial",options:["Aromas relajantes: Como vainilla o lavanda","Música suave: Ambiente tranquilo","Iluminación cálida: Hace ver mejor los colores","Sillas cómodas: Para largas sesiones"],multi:true},
+    {section:2,q:"¿Cómo recibes a tus clientas al llegar?",name:"recepcion",hint:"Ej: Sonrisa, saludo por su nombre, ofrecer agua o café."},
+    {section:2,q:"¿Qué frases o palabras usas para generar confianza?",name:"frases_confianza",hint:"Ej: ‘Tú eres única, vamos a hacer algo especial solo para ti’."},
+    {section:2,q:"¿Cómo haces seguimiento post-venta?",name:"post_venta",hint:"Ej: Mensaje preguntando cómo se siente, tips de cuidado, recordar próximas citas."},
+    {section:2,q:"¿Qué estrategias usas para que regresen tus clientas?",name:"estrategias_retorno",hint:"Ej: Pequeños descuentos, recordar aniversarios de su primera visita."},
+
+    {section:3,q:"Selecciona tu estilo visual",name:"estilo_visual",options:["Elegante y minimalista: Colores neutros","Divertida y cercana: Colores vivos","Moderna y atrevida: Colores intensos","Natural y cálida: Tonos tierra"],multi:false},
+    {section:3,q:"¿Qué tono de voz usarás?",name:"tono_voz",options:["Amigable: Cercano y sencillo","Sofisticado: Elegante y educado","Experto: Con autoridad en el tema","Inspirador: Motivador y positivo"],multi:false},
+    {section:3,q:"¿Qué tipo de contenido publicarías en redes?",name:"contenido",options:["Antes y después: Mostrar transformaciones","Historias de clientas: Experiencias reales","Tips de cuidado: Enseñar algo útil","Detrás de cámaras: Mostrar el proceso"],multi:true},
+    {section:3,q:"¿Cómo recogerás testimonios de clientas?",name:"testimonios",hint:"Ej: Fotos con su permiso, pequeñas entrevistas, mensajes que te envían."},
+    {section:3,q:"¿Qué promociones o fidelización aplicarías?",name:"fidelizacion",hint:"Ej: Programa de referidos, descuentos por cliente frecuente."},
+    {section:3,q:"¿Qué historias de transformación te gustaría contar en redes?",name:"historias",hint:"Ej: Antes y después con la emoción de la clienta."},
+    {section:3,q:"¿Qué meta te gustaría alcanzar en redes en 6 meses?",name:"meta_redes",hint:"Ej: 500 seguidores fieles que interactúen contigo."}
+  ];
+
+  let current=0,answers={};
+  const quiz=document.getElementById('quiz');
+  const nextBtn=document.getElementById('nextBtn');
+  const prevBtn=document.getElementById('prevBtn');
+  const progress=document.getElementById('progress');
+  const progressFill=document.getElementById('progressFill');
+
+  const tabs=document.getElementById('tabs');
+  sections.forEach((s,i)=>{
+    const t=document.createElement('div');
+    t.className='tab';
+    t.innerText=s.title;
+    t.addEventListener('click',()=>{
+      current=questions.findIndex(q=>q.section===i);
+      renderQuestion();
+    });
+    tabs.appendChild(t);
+  });
+
+  function renderQuestion(){
+    document.querySelectorAll('.tab').forEach((tab,i)=>{
+      tab.classList.toggle('active',questions[current].section===i);
+    });
+    const q=questions[current];
+    const section=sections[q.section];
+    let html=`<img class='icon' src='${section.icon}' alt='icon'><div class='section-title'>${section.title}</div>`;
+    html+=`<div class='question fade'>${q.q}</div>`;
+    if(q.options){
+      html+=`<${q.multi?"select multiple":"select"} id='answer'>`;
+      q.options.forEach(o=>html+=`<option>${o}</option>`);
+      html+='</select>';
+    } else {
+      html+=`<textarea id='answer'></textarea>`;
+    }
+    if(q.hint) html+=`<div class='hint'>${q.hint}</div>`;
+    quiz.innerHTML=html;
+    progress.innerText=`Pregunta ${current+1} de ${questions.length}`;
+    progressFill.style.width=((current+1)/questions.length*100)+"%";
+    nextBtn.innerText=current===questions.length-1?"Enviar":"Siguiente";
+    prevBtn.style.display=current>0?"inline-block":"none";
+  }
+
+  nextBtn.addEventListener('click',()=>{
+    const q=questions[current];
+    const input=document.getElementById('answer');
+    let value;
+    if(input.tagName==="SELECT" && input.multiple){
+      value=[...input.selectedOptions].map(o=>o.value).join(", ");
+    } else {value=input.value;}
+    answers[q.name]=value;
+
+    if(current<questions.length-1){
+      current++;
+      renderQuestion();
+    } else {
+      const mensaje=Object.entries(answers).map(([k,v])=>`\n${k}: ${v}`).join("\n");
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({chat_id:chatId,text:"Manual de Identidad Completado:"+mensaje})
+      }).then(()=>{
+        quiz.innerHTML="<h3>¡Gracias! Tus respuestas fueron enviadas.</h3>";
+        nextBtn.style.display="none";
+        prevBtn.style.display="none";
+        progress.innerText="";
+        progressFill.style.width="100%";
+      }).catch(()=>alert("Error al enviar"));
+    }
+  });
+
+  prevBtn.addEventListener('click',()=>{
+    if(current>0){current--;renderQuestion();}
+  });
+
+  renderQuestion();
+</script>
+</body>
+</html>
