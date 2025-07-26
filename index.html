@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Interactivo - Manual de Identidad</title>
+  <title>Manual de Identidad - Salón de Belleza</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -410,28 +410,6 @@
       line-height: 1.7;
     }
     
-    .btn-download {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      font-size: 1.1rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-      box-shadow: 0 5px 15px rgba(196, 155, 102, 0.4);
-    }
-    
-    .btn-download:hover {
-      background: var(--primary-dark);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(196, 155, 102, 0.5);
-    }
-    
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -510,8 +488,8 @@
 <body>
 <div class="quiz-container">
   <div class="quiz-header">
-    <h1><i class="fas fa-book-open"></i> Manual de Identidad Interactivo</h1>
-    <p>Completa este cuestionario para definir la identidad de tu salón de belleza</p>
+    <h1><i class="fas fa-spa"></i> Manual de Identidad para Salones</h1>
+    <p>Define la identidad única de tu salón de belleza en 20 preguntas</p>
   </div>
   
   <div class="quiz-content">
@@ -531,7 +509,7 @@
     <div class="progress-container">
       <div class="progress-info">
         <span id="currentQuestion">Pregunta 1</span>
-        <span id="totalQuestions">de 28</span>
+        <span id="totalQuestions">de 20</span>
       </div>
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
@@ -553,35 +531,34 @@
     {title: "Marketing", icon: "fas fa-bullhorn"}
   ];
 
-  // Preguntas del cuestionario
+  // Preguntas del cuestionario (sin las eliminadas)
   const questions = [
-    {section: 0, q: "¿Cuál es la misión de tu salón?", name: "mision", hint: "Describe tu razón de ser. Ejemplo: Realzar la belleza y confianza con moños y pelucas en un ambiente personalizado."},
-    {section: 0, q: "¿Cuál es la visión a futuro?", name: "vision", hint: "Imagina tu salón en 5 años. Ejemplo: Ser el referente nacional en moños y pelucas por calidad y confianza."},
-    {section: 0, q: "Elige tus valores principales", name: "valores", options: ["Calidad: Siempre ofrecer lo mejor", "Innovación: Probar nuevas tendencias", "Empatía: Escuchar a cada clienta", "Confianza: Ser transparente", "Creatividad: Diseños únicos", "Profesionalismo: Trato experto"], multi: true},
-    {section: 0, q: "¿Cómo quieres que te perciban tus clientas?", name: "percepcion", hint: "Ej: Como experta cercana y confiable que entiende sus necesidades."},
-    {section: 0, q: "Describe tu estilo personal de atención", name: "estilo_atencion", hint: "Ej: Cercano y conversador, formal y respetuoso, siempre positivo."},
-    {section: 0, q: "¿Por qué decidiste abrir este salón?", name: "motivo_salon", hint: "Ej: Pasión por ayudar a mujeres a sentirse seguras y hermosas."},
-    {section: 0, q: "¿Qué historia personal te inspira en este trabajo?", name: "historia_personal", hint: "Ej: Una experiencia personal que te llevó a dedicarte a los moños y pelucas."},
-    {section: 1, q: "Describe a tu cliente ideal (datos demográficos)", name: "demograficos", hint: "Ej: Mujeres de 25 a 50 años, profesionales urbanas."},
-    {section: 1, q: "Motivaciones de compra", name: "motivaciones", options: ["Eventos especiales: Bodas, fiestas", "Expresión personal: Mostrar su estilo", "Pérdida de cabello: Necesidad médica", "Comodidad: Fácil de usar y cuidar"], multi: true},
-    {section: 1, q: "¿Cuáles son sus intereses y estilo de vida?", name: "psicograficos", hint: "Ej: Aman la moda, siguen influencers, valoran calidad y discreción."},
-    {section: 1, q: "¿Qué emociones busca al venir a tu salón?", name: "emociones", hint: "Ej: Confianza, sentirse especial, renovada."},
-    {section: 1, q: "¿Qué problema principal quiere resolver tu cliente?", name: "problema_cliente", hint: "Ej: Necesita un look que le devuelva seguridad o cubrir pérdida de cabello."},
-    {section: 1, q: "¿Qué tipo de clientas te recomiendan más?", name: "recomendadoras", hint: "Ej: Mujeres que quedaron felices con un cambio de look para un evento."},
-    {section: 2, q: "¿Cuál es tu propuesta de valor única?", name: "pvu", hint: "¿Qué te hace diferente? Ej: Moños y pelucas tan naturales que nadie notará la diferencia."},
-    {section: 2, q: "¿Cómo demuestras tu experiencia?", name: "experiencia", hint: "Ej: Mostrar antes y después, consejos personalizados, certificados."},
-    {section: 2, q: "¿Qué problema resuelves principalmente?", name: "problema", hint: "Ej: Ayudo a mujeres a sentirse seguras con su imagen."},
-    {section: 2, q: "¿Qué elementos sensoriales usas en tu salón?", name: "sensorial", options: ["Aromas relajantes: Como vainilla o lavanda", "Música suave: Ambiente tranquilo", "Iluminación cálida: Hace ver mejor los colores", "Sillas cómodas: Para largas sesiones"], multi: true},
-    {section: 2, q: "¿Cómo recibes a tus clientas al llegar?", name: "recepcion", hint: "Ej: Sonrisa, saludo por su nombre, ofrecer agua o café."},
-    {section: 2, q: "¿Qué frases o palabras usas para generar confianza?", name: "frases_confianza", hint: "Ej: 'Tú eres única, vamos a hacer algo especial solo para ti'."},
-    {section: 2, q: "¿Cómo haces seguimiento post-venta?", name: "post_venta", hint: "Ej: Mensaje preguntando cómo se siente, tips de cuidado, recordar próximas citas."},
-    {section: 2, q: "¿Qué estrategias usas para que regresen tus clientas?", name: "estrategias_retorno", hint: "Ej: Pequeños descuentos, recordar aniversarios de su primera visita."},
-    {section: 3, q: "Selecciona tu estilo visual", name: "estilo_visual", options: ["Elegante y minimalista: Colores neutros", "Divertida y cercana: Colores vivos", "Moderna y atrevida: Colores intensos", "Natural y cálida: Tonos tierra"], multi: false},
+    {section: 0, q: "¿Cuál es la misión de tu salón?", name: "mision", hint: "Describe tu razón de ser. Ejemplo: Realzar la belleza y confianza de nuestros clientes en un ambiente personalizado."},
+    {section: 0, q: "¿Cuál es la visión a futuro?", name: "vision", hint: "Imagina tu salón en 5 años. Ejemplo: Ser el referente nacional por calidad y confianza en nuestros servicios."},
+    {section: 0, q: "Elige tus valores principales", name: "valores", options: ["Calidad: Siempre ofrecer lo mejor", "Innovación: Probar nuevas tendencias", "Empatía: Escuchar a cada cliente", "Confianza: Ser transparente", "Creatividad: Diseños únicos", "Profesionalismo: Trato experto"], multi: true},
+    {section: 0, q: "¿Cómo quieres que te perciban tus clientes?", name: "percepcion", hint: "Ej: Como expertos cercanos y confiables que entienden sus necesidades."},
+    
+    // Sección Público
+    {section: 1, q: "Describe a tu cliente ideal (datos demográficos)", name: "demograficos", hint: "Ej: Mujeres y hombres de 20 a 50 años, profesionales urbanos."},
+    {section: 1, q: "Motivaciones de compra", name: "motivaciones", options: ["Eventos especiales: Bodas, fiestas", "Expresión personal: Mostrar su estilo", "Cuidado personal: Mantenimiento rutinario", "Comodidad: Servicios accesibles"], multi: true},
+    {section: 1, q: "¿Cuáles son sus intereses y estilo de vida?", name: "psicograficos", hint: "Ej: Siguen tendencias de moda, valoran calidad y bienestar personal."},
+    {section: 1, q: "¿Qué emociones busca al venir a tu salón?", name: "emociones", hint: "Ej: Confianza, sentirse especial, renovado."},
+    
+    // Sección Estrategias
+    {section: 2, q: "¿Cuál es tu propuesta de valor única?", name: "pvu", hint: "¿Qué te hace diferente? Ej: Servicios personalizados que resaltan tu belleza natural."},
+    {section: 2, q: "¿Cómo demuestras tu experiencia?", name: "experiencia", hint: "Ej: Mostrar resultados, consejos personalizados, certificados."},
+    {section: 2, q: "¿Qué elementos sensoriales usas en tu salón?", name: "sensorial", options: ["Aromas relajantes: Como vainilla o lavanda", "Música suave: Ambiente tranquilo", "Iluminación cálida: Ambiente acogedor", "Sillas cómodas: Para largas sesiones"], multi: true},
+    {section: 2, q: "¿Cómo recibes a tus clientes al llegar?", name: "recepcion", hint: "Ej: Sonrisa, saludo por su nombre, ofrecer bebida."},
+    {section: 2, q: "¿Qué frases o palabras usas para generar confianza?", name: "frases_confianza", hint: "Ej: 'Tú eres único, vamos a crear algo especial solo para ti'."},
+    {section: 2, q: "¿Cómo haces seguimiento post-venta?", name: "post_venta", hint: "Ej: Mensaje preguntando cómo se siente, tips de cuidado."},
+    {section: 2, q: "¿Qué estrategias usas para que regresen tus clientes?", name: "estrategias_retorno", hint: "Ej: Programas de fidelización, recordar aniversarios."},
+    
+    // Sección Marketing
+    {section: 3, q: "Selecciona tu estilo visual", name: "estilo_visual", options: ["Elegante y minimalista: Colores neutros", "Divertido y cercano: Colores vivos", "Moderno y atrevido: Colores intensos", "Natural y cálido: Tonos tierra"], multi: false},
     {section: 3, q: "¿Qué tono de voz usarás?", name: "tono_voz", options: ["Amigable: Cercano y sencillo", "Sofisticado: Elegante y educado", "Experto: Con autoridad en el tema", "Inspirador: Motivador y positivo"], multi: false},
-    {section: 3, q: "¿Qué tipo de contenido publicarías en redes?", name: "contenido", options: ["Antes y después: Mostrar transformaciones", "Historias de clientas: Experiencias reales", "Tips de cuidado: Enseñar algo útil", "Detrás de cámaras: Mostrar el proceso"], multi: true},
-    {section: 3, q: "¿Cómo recogerás testimonios de clientas?", name: "testimonios", hint: "Ej: Fotos con su permiso, pequeñas entrevistas, mensajes que te envían."},
+    {section: 3, q: "¿Qué tipo de contenido publicarías en redes?", name: "contenido", options: ["Antes y después: Mostrar transformaciones", "Historias de clientes: Experiencias reales", "Tips de cuidado: Enseñar algo útil", "Detrás de cámaras: Mostrar el proceso"], multi: true},
+    {section: 3, q: "¿Cómo recogerás testimonios de clientes?", name: "testimonios", hint: "Ej: Fotos con su permiso, pequeñas entrevistas, mensajes."},
     {section: 3, q: "¿Qué promociones o fidelización aplicarías?", name: "fidelizacion", hint: "Ej: Programa de referidos, descuentos por cliente frecuente."},
-    {section: 3, q: "¿Qué historias de transformación te gustaría contar en redes?", name: "historias", hint: "Ej: Antes y después con la emoción de la clienta."},
     {section: 3, q: "¿Qué meta te gustaría alcanzar en redes en 6 meses?", name: "meta_redes", hint: "Ej: 500 seguidores fieles que interactúen contigo."}
   ];
 
@@ -756,13 +733,6 @@
       }
     }
     
-    // Validar que haya respuesta
-    const currentAnswer = answers[questions[currentQuestion].name];
-    if (!currentAnswer || (Array.isArray(currentAnswer) && currentAnswer.length === 0)) {
-      alert("Por favor, responde esta pregunta antes de continuar.");
-      return;
-    }
-    
     if (currentQuestion < questions.length - 1) {
       currentQuestion++;
       renderQuestion();
@@ -789,12 +759,16 @@
           const answer = answers[q.name];
           message += `*${q.q}:*\n`;
           
-          if (Array.isArray(answer)) {
-            answer.forEach((a, idx) => {
-              message += `  • ${a}\n`;
-            });
+          if (answer) {
+            if (Array.isArray(answer)) {
+              answer.forEach((a, idx) => {
+                message += `  • ${a}\n`;
+              });
+            } else {
+              message += `${answer}\n`;
+            }
           } else {
-            message += `${answer}\n`;
+            message += "Sin respuesta\n";
           }
           
           message += "\n";
@@ -839,11 +813,8 @@
           <i class="fas fa-check"></i>
         </div>
         <h2>¡Manual Completado!</h2>
-        <p>Tus respuestas han sido enviadas exitosamente. Ahora puedes descargar tu manual de identidad completo que hemos creado basado en tus respuestas.</p>
-        <p>Te enviaremos también una copia por Telegram para que la tengas disponible.</p>
-        <button class="btn-download" id="downloadBtn">
-          <i class="fas fa-download"></i> Descargar Manual PDF
-        </button>
+        <p>Tus respuestas han sido enviadas exitosamente. En breve recibirás un resumen por Telegram con la información de tu manual de identidad.</p>
+        <p>¡Gracias por completar el cuestionario!</p>
       </div>
     `;
     
@@ -852,11 +823,6 @@
     prevBtn.style.display = "none";
     nextBtn.style.display = "none";
     document.querySelector('.progress-container').style.display = "none";
-    
-    // Evento para botón de descarga
-    document.getElementById('downloadBtn').addEventListener('click', () => {
-      alert("En una implementación real, aquí se descargaría el manual en PDF. ¡Gracias por completar el cuestionario!");
-    });
   }
 
   // Iniciar el cuestionario
