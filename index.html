@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Interactivo - Manual de Identidad</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #c49b66;
+      --primary-dark: #a9814f;
+      --secondary: #f1edea;
+      --background: linear-gradient(135deg, #fdf6e3, #f1edea);
+      --text: #333;
+      --light-text: #666;
+      --card-bg: #fff;
+      --shadow: 0 8px 25px rgba(0,0,0,0.15);
+      --radius: 15px;
+      --transition: all 0.3s ease;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 1.6;
+    }
+    
+    .quiz-container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .quiz-header {
+      background: var(--primary);
+      color: white;
+      padding: 30px 25px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .quiz-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(to right, #f1edea, var(--primary-dark), #f1edea);
+    }
+    
+    .quiz-header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .quiz-header p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+    
+    .quiz-content {
+      padding: 30px;
+    }
+    
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .tab {
+      flex: 1;
+      min-width: 150px;
+      padding: 15px 10px;
+      text-align: center;
+      background: var(--secondary);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+    
+    .tab.active {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(196, 155, 102, 0.4);
+    }
+    
+    .tab-icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      transition: var(--transition);
+    }
+    
+    .tab-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin: 20px 0 30px;
+      position: relative;
+    }
+    
+    .section-title h2 {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      box-shadow: 0 4px 8px rgba(196, 155, 102, 0.3);
+    }
+    
+    .question-container {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border: 1px solid #eee;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .question-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: var(--primary);
+    }
+    
+    .question-number {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 35px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    
+    .answer-container {
+      margin-top: 15px;
+    }
+    
+    textarea {
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 120px;
+      transition: var(--transition);
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(196, 155, 102, 0.2);
+    }
+    
+    .options-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 15px;
+      border-radius: 10px;
+      background: white;
+      border: 1px solid #eee;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+    
+    .option-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      border-color: var(--primary);
+    }
+    
+    .option-item.selected {
+      background: rgba(196, 155, 102, 0.1);
+      border-color: var(--primary);
+    }
+    
+    .option-checkbox {
+      margin-right: 12px;
+      margin-top: 3px;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+    
+    .option-checkbox i {
+      font-size: 0.8rem;
+      color: white;
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .option-item.selected .option-checkbox {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    .option-item.selected .option-checkbox i {
+      opacity: 1;
+    }
+    
+    .option-text {
+      font-size: 1rem;
+      color: var(--text);
+    }
+    
+    .hint {
+      background: rgba(196, 155, 102, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: var(--light-text);
+    }
+    
+    .hint i {
+      margin-right: 8px;
+      color: var(--primary);
+    }
+    
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      gap: 15px;
+    }
+    
+    .nav-btn {
+      padding: 15px 25px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 150px;
+    }
+    
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    #prevBtn {
+      background: #f1f1f1;
+      color: var(--text);
+    }
+    
+    #prevBtn:hover:not(:disabled) {
+      background: #e0e0e0;
+    }
+    
+    #nextBtn {
+      background: var(--primary);
+      color: white;
+    }
+    
+    #nextBtn:hover:not(:disabled) {
+      background: var(--primary-dark);
+    }
+    
+    .progress-container {
+      margin-top: 30px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      color: var(--light-text);
+      font-weight: 500;
+    }
+    
+    .progress-bar {
+      height: 12px;
+      width: 100%;
+      background: #eee;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      width: 0%;
+      transition: width 0.5s ease;
+      border-radius: 6px;
+    }
+    
+    .success-container {
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeIn 0.8s ease;
+    }
+    
+    .success-icon {
+      width: 100px;
+      height: 100px;
+      background: #4caf50;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      animation: scaleIn 0.6s ease;
+    }
+    
+    .success-icon i {
+      font-size: 3.5rem;
+      color: white;
+    }
+    
+    .success-container h2 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    
+    .success-container p {
+      font-size: 1.1rem;
+      color: var(--light-text);
+      max-width: 600px;
+      margin: 0 auto 30px;
+      line-height: 1.7;
+    }
+    
+    .btn-download {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(196, 155, 102, 0.4);
+    }
+    
+    .btn-download:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(196, 155, 102, 0.5);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes scaleIn {
+      0% { transform: scale(0); opacity: 0; }
+      70% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .quiz-header {
+        padding: 25px 15px;
+      }
+      
+      .quiz-header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .quiz-content {
+        padding: 20px;
+      }
+      
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .question-text {
+        font-size: 1.15rem;
+      }
+      
+      .options-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .nav-buttons {
+        flex-direction: column;
+      }
+      
+      .nav-btn {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .quiz-header {
+        padding: 20px 15px;
+      }
+      
+      .quiz-header h1 {
+        font-size: 1.6rem;
+      }
+      
+      .section-title h2 {
+        font-size: 1.2rem;
+        padding: 8px 20px;
+      }
+      
+      .question-container {
+        padding: 20px 15px;
+      }
+      
+      .nav-btn {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="quiz-container">
+  <div class="quiz-header">
+    <h1><i class="fas fa-book-open"></i> Manual de Identidad Interactivo</h1>
+    <p>Completa este cuestionario para definir la identidad de tu salón de belleza</p>
+  </div>
+  
+  <div class="quiz-content">
+    <div class="tabs" id="tabs"></div>
+    
+    <div id="quiz"></div>
+    
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prevBtn" disabled>
+        <i class="fas fa-arrow-left"></i> Anterior
+      </button>
+      <button class="nav-btn" id="nextBtn">
+        Siguiente <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+    
+    <div class="progress-container">
+      <div class="progress-info">
+        <span id="currentQuestion">Pregunta 1</span>
+        <span id="totalQuestions">de 28</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Configuración de Telegram
+  const botToken = '7609445234:AAHaIOs_atVGpS9dfD5VPpv5ohxW0dduMhQ';
+  const chatId = '929759981';
+
+  // Secciones del cuestionario
+  const sections = [
+    {title: "Fundamentos", icon: "fas fa-drafting-compass"},
+    {title: "Público", icon: "fas fa-users"},
+    {title: "Estrategias", icon: "fas fa-chess-knight"},
+    {title: "Marketing", icon: "fas fa-bullhorn"}
+  ];
+
+  // Preguntas del cuestionario
+  const questions = [
+    {section: 0, q: "¿Cuál es la misión de tu salón?", name: "mision", hint: "Describe tu razón de ser. Ejemplo: Realzar la belleza y confianza con moños y pelucas en un ambiente personalizado."},
+    {section: 0, q: "¿Cuál es la visión a futuro?", name: "vision", hint: "Imagina tu salón en 5 años. Ejemplo: Ser el referente nacional en moños y pelucas por calidad y confianza."},
+    {section: 0, q: "Elige tus valores principales", name: "valores", options: ["Calidad: Siempre ofrecer lo mejor", "Innovación: Probar nuevas tendencias", "Empatía: Escuchar a cada clienta", "Confianza: Ser transparente", "Creatividad: Diseños únicos", "Profesionalismo: Trato experto"], multi: true},
+    {section: 0, q: "¿Cómo quieres que te perciban tus clientas?", name: "percepcion", hint: "Ej: Como experta cercana y confiable que entiende sus necesidades."},
+    {section: 0, q: "Describe tu estilo personal de atención", name: "estilo_atencion", hint: "Ej: Cercano y conversador, formal y respetuoso, siempre positivo."},
+    {section: 0, q: "¿Por qué decidiste abrir este salón?", name: "motivo_salon", hint: "Ej: Pasión por ayudar a mujeres a sentirse seguras y hermosas."},
+    {section: 0, q: "¿Qué historia personal te inspira en este trabajo?", name: "historia_personal", hint: "Ej: Una experiencia personal que te llevó a dedicarte a los moños y pelucas."},
+    {section: 1, q: "Describe a tu cliente ideal (datos demográficos)", name: "demograficos", hint: "Ej: Mujeres de 25 a 50 años, profesionales urbanas."},
+    {section: 1, q: "Motivaciones de compra", name: "motivaciones", options: ["Eventos especiales: Bodas, fiestas", "Expresión personal: Mostrar su estilo", "Pérdida de cabello: Necesidad médica", "Comodidad: Fácil de usar y cuidar"], multi: true},
+    {section: 1, q: "¿Cuáles son sus intereses y estilo de vida?", name: "psicograficos", hint: "Ej: Aman la moda, siguen influencers, valoran calidad y discreción."},
+    {section: 1, q: "¿Qué emociones busca al venir a tu salón?", name: "emociones", hint: "Ej: Confianza, sentirse especial, renovada."},
+    {section: 1, q: "¿Qué problema principal quiere resolver tu cliente?", name: "problema_cliente", hint: "Ej: Necesita un look que le devuelva seguridad o cubrir pérdida de cabello."},
+    {section: 1, q: "¿Qué tipo de clientas te recomiendan más?", name: "recomendadoras", hint: "Ej: Mujeres que quedaron felices con un cambio de look para un evento."},
+    {section: 2, q: "¿Cuál es tu propuesta de valor única?", name: "pvu", hint: "¿Qué te hace diferente? Ej: Moños y pelucas tan naturales que nadie notará la diferencia."},
+    {section: 2, q: "¿Cómo demuestras tu experiencia?", name: "experiencia", hint: "Ej: Mostrar antes y después, consejos personalizados, certificados."},
+    {section: 2, q: "¿Qué problema resuelves principalmente?", name: "problema", hint: "Ej: Ayudo a mujeres a sentirse seguras con su imagen."},
+    {section: 2, q: "¿Qué elementos sensoriales usas en tu salón?", name: "sensorial", options: ["Aromas relajantes: Como vainilla o lavanda", "Música suave: Ambiente tranquilo", "Iluminación cálida: Hace ver mejor los colores", "Sillas cómodas: Para largas sesiones"], multi: true},
+    {section: 2, q: "¿Cómo recibes a tus clientas al llegar?", name: "recepcion", hint: "Ej: Sonrisa, saludo por su nombre, ofrecer agua o café."},
+    {section: 2, q: "¿Qué frases o palabras usas para generar confianza?", name: "frases_confianza", hint: "Ej: 'Tú eres única, vamos a hacer algo especial solo para ti'."},
+    {section: 2, q: "¿Cómo haces seguimiento post-venta?", name: "post_venta", hint: "Ej: Mensaje preguntando cómo se siente, tips de cuidado, recordar próximas citas."},
+    {section: 2, q: "¿Qué estrategias usas para que regresen tus clientas?", name: "estrategias_retorno", hint: "Ej: Pequeños descuentos, recordar aniversarios de su primera visita."},
+    {section: 3, q: "Selecciona tu estilo visual", name: "estilo_visual", options: ["Elegante y minimalista: Colores neutros", "Divertida y cercana: Colores vivos", "Moderna y atrevida: Colores intensos", "Natural y cálida: Tonos tierra"], multi: false},
+    {section: 3, q: "¿Qué tono de voz usarás?", name: "tono_voz", options: ["Amigable: Cercano y sencillo", "Sofisticado: Elegante y educado", "Experto: Con autoridad en el tema", "Inspirador: Motivador y positivo"], multi: false},
+    {section: 3, q: "¿Qué tipo de contenido publicarías en redes?", name: "contenido", options: ["Antes y después: Mostrar transformaciones", "Historias de clientas: Experiencias reales", "Tips de cuidado: Enseñar algo útil", "Detrás de cámaras: Mostrar el proceso"], multi: true},
+    {section: 3, q: "¿Cómo recogerás testimonios de clientas?", name: "testimonios", hint: "Ej: Fotos con su permiso, pequeñas entrevistas, mensajes que te envían."},
+    {section: 3, q: "¿Qué promociones o fidelización aplicarías?", name: "fidelizacion", hint: "Ej: Programa de referidos, descuentos por cliente frecuente."},
+    {section: 3, q: "¿Qué historias de transformación te gustaría contar en redes?", name: "historias", hint: "Ej: Antes y después con la emoción de la clienta."},
+    {section: 3, q: "¿Qué meta te gustaría alcanzar en redes en 6 meses?", name: "meta_redes", hint: "Ej: 500 seguidores fieles que interactúen contigo."}
+  ];
+
+  // Variables globales
+  let currentQuestion = 0;
+  let answers = {};
+  const quizElement = document.getElementById('quiz');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const progressFill = document.getElementById('progressFill');
+  const tabsContainer = document.getElementById('tabs');
+  const currentQuestionElement = document.getElementById('currentQuestion');
+  const totalQuestionsElement = document.getElementById('totalQuestions');
+
+  // Inicialización
+  function initQuiz() {
+    createTabs();
+    renderQuestion();
+    totalQuestionsElement.textContent = `de ${questions.length}`;
+  }
+
+  // Crear pestañas de secciones
+  function createTabs() {
+    sections.forEach((section, index) => {
+      const tab = document.createElement('div');
+      tab.className = 'tab';
+      tab.innerHTML = `
+        <div class="tab-icon">${section.icon ? `<i class="${section.icon}"></i>` : ''}</div>
+        <div class="tab-title">${section.title}</div>
+      `;
+      
+      tab.addEventListener('click', () => {
+        const firstQuestionIndex = questions.findIndex(q => q.section === index);
+        if (firstQuestionIndex !== -1) {
+          currentQuestion = firstQuestionIndex;
+          renderQuestion();
+        }
+      });
+      
+      tabsContainer.appendChild(tab);
+    });
+  }
+
+  // Renderizar pregunta actual
+  function renderQuestion() {
+    const question = questions[currentQuestion];
+    const section = sections[question.section];
+    
+    // Actualizar pestañas activas
+    document.querySelectorAll('.tab').forEach((tab, i) => {
+      tab.classList.toggle('active', question.section === i);
+    });
+    
+    // Actualizar número de pregunta
+    currentQuestionElement.textContent = `Pregunta ${currentQuestion + 1}`;
+    
+    // Actualizar barra de progreso
+    const progressPercent = ((currentQuestion + 1) / questions.length) * 100;
+    progressFill.style.width = `${progressPercent}%`;
+    
+    // Construir HTML de la pregunta
+    let html = `
+      <div class="section-title">
+        <h2>${section.title}</h2>
+      </div>
+      
+      <div class="question-container">
+        <div class="question-number">${currentQuestion + 1}</div>
+        <div class="question-text">${question.q}</div>
+        
+        <div class="answer-container">
+    `;
+    
+    // Campo de respuesta
+    if (question.options) {
+      html += `<div class="options-container">`;
+      
+      question.options.forEach((option, index) => {
+        // Verificar si esta opción está seleccionada
+        const isSelected = answers[question.name] && 
+                          (question.multi ? 
+                           answers[question.name].includes(option) : 
+                           answers[question.name] === option);
+        
+        html += `
+          <div class="option-item ${isSelected ? 'selected' : ''}" data-value="${option}">
+            <div class="option-checkbox">
+              <i class="fas fa-check"></i>
+            </div>
+            <div class="option-text">${option}</div>
+          </div>
+        `;
+      });
+      
+      html += `</div>`;
+    } else {
+      html += `<textarea id="answer" placeholder="Escribe tu respuesta aquí...">${answers[question.name] || ''}</textarea>`;
+    }
+    
+    // Hint si existe
+    if (question.hint) {
+      html += `
+        <div class="hint">
+          <i class="fas fa-lightbulb"></i> ${question.hint}
+        </div>
+      `;
+    }
+    
+    html += `</div></div>`;
+    
+    quizElement.innerHTML = html;
+    
+    // Configurar eventos para las opciones
+    if (question.options) {
+      document.querySelectorAll('.option-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const value = item.getAttribute('data-value');
+          
+          if (question.multi) {
+            // Manejar selección múltiple
+            if (!answers[question.name]) {
+              answers[question.name] = [];
+            }
+            
+            if (answers[question.name].includes(value)) {
+              // Deseleccionar
+              answers[question.name] = answers[question.name].filter(v => v !== value);
+              item.classList.remove('selected');
+            } else {
+              // Seleccionar
+              answers[question.name].push(value);
+              item.classList.add('selected');
+            }
+          } else {
+            // Selección única
+            answers[question.name] = value;
+            
+            // Quitar selección de otros elementos
+            document.querySelectorAll('.option-item').forEach(otherItem => {
+              otherItem.classList.remove('selected');
+            });
+            
+            // Seleccionar este elemento
+            item.classList.add('selected');
+          }
+        });
+      });
+    }
+    
+    // Actualizar estado de botones
+    prevBtn.disabled = currentQuestion === 0;
+    nextBtn.textContent = currentQuestion === questions.length - 1 ? "Finalizar" : "Siguiente";
+    nextBtn.innerHTML = currentQuestion === questions.length - 1 ? 
+      `<i class="fas fa-check"></i> Finalizar` : 
+      `Siguiente <i class="fas fa-arrow-right"></i>`;
+  }
+
+  // Navegación entre preguntas
+  prevBtn.addEventListener('click', () => {
+    if (currentQuestion > 0) {
+      currentQuestion--;
+      renderQuestion();
+    }
+  });
+
+  nextBtn.addEventListener('click', () => {
+    // Guardar respuesta para campos de texto
+    if (!questions[currentQuestion].options) {
+      const answerInput = document.getElementById('answer');
+      if (answerInput) {
+        answers[questions[currentQuestion].name] = answerInput.value;
+      }
+    }
+    
+    // Validar que haya respuesta
+    const currentAnswer = answers[questions[currentQuestion].name];
+    if (!currentAnswer || (Array.isArray(currentAnswer) && currentAnswer.length === 0)) {
+      alert("Por favor, responde esta pregunta antes de continuar.");
+      return;
+    }
+    
+    if (currentQuestion < questions.length - 1) {
+      currentQuestion++;
+      renderQuestion();
+    } else {
+      // Enviar respuestas a Telegram
+      sendAnswersToTelegram();
+    }
+  });
+
+  // Función para enviar respuestas a Telegram
+  function sendAnswersToTelegram() {
+    // Construir mensaje
+    let message = "📋 *Manual de Identidad Completado* 📋\n\n";
+    
+    // Agrupar por secciones
+    sections.forEach((section, sectionIndex) => {
+      const sectionQuestions = questions.filter(q => q.section === sectionIndex);
+      
+      if (sectionQuestions.length > 0) {
+        message += `*${section.title.toUpperCase()}*\n`;
+        message += "--------------------------------\n";
+        
+        sectionQuestions.forEach((q, i) => {
+          const answer = answers[q.name];
+          message += `*${q.q}:*\n`;
+          
+          if (Array.isArray(answer)) {
+            answer.forEach((a, idx) => {
+              message += `  • ${a}\n`;
+            });
+          } else {
+            message += `${answer}\n`;
+          }
+          
+          message += "\n";
+        });
+        
+        message += "\n";
+      }
+    });
+    
+    // Enviar a Telegram
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message,
+        parse_mode: "Markdown"
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        showSuccessScreen();
+      } else {
+        alert("Hubo un error al enviar tus respuestas. Por favor, inténtalo de nuevo.");
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("Hubo un error al enviar tus respuestas. Por favor, inténtalo de nuevo.");
+    });
+  }
+
+  // Mostrar pantalla de éxito
+  function showSuccessScreen() {
+    quizElement.innerHTML = `
+      <div class="success-container">
+        <div class="success-icon">
+          <i class="fas fa-check"></i>
+        </div>
+        <h2>¡Manual Completado!</h2>
+        <p>Tus respuestas han sido enviadas exitosamente. Ahora puedes descargar tu manual de identidad completo que hemos creado basado en tus respuestas.</p>
+        <p>Te enviaremos también una copia por Telegram para que la tengas disponible.</p>
+        <button class="btn-download" id="downloadBtn">
+          <i class="fas fa-download"></i> Descargar Manual PDF
+        </button>
+      </div>
+    `;
+    
+    // Ocultar elementos innecesarios
+    tabsContainer.style.display = "none";
+    prevBtn.style.display = "none";
+    nextBtn.style.display = "none";
+    document.querySelector('.progress-container').style.display = "none";
+    
+    // Evento para botón de descarga
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      alert("En una implementación real, aquí se descargaría el manual en PDF. ¡Gracias por completar el cuestionario!");
+    });
+  }
+
+  // Iniciar el cuestionario
+  initQuiz();
+</script>
+</body>
+</html>
