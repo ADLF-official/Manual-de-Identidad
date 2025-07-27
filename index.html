@@ -6,6 +6,7 @@
   <title>Manual de Identidad - Salón de Belleza</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&family=Montserrat:wght@600&family=Raleway:wght@500&family=Dancing+Script:wght@700&family=Oswald:wght@500&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -40,7 +41,7 @@
     
     .quiz-container {
       width: 100%;
-      max-width: 800px;
+      max-width: 900px;
       background: var(--card-bg);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -410,6 +411,176 @@
       line-height: 1.7;
     }
     
+    /* Estilos para paleta de colores */
+    .color-palette-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .color-palette {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .color-palette:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    }
+    
+    .color-palette.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(196, 155, 102, 0.3);
+    }
+    
+    .color-row {
+      display: flex;
+      height: 60px;
+    }
+    
+    .color-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .color-code {
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      position: absolute;
+      bottom: 5px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .color-item:hover .color-code {
+      opacity: 1;
+    }
+    
+    .palette-name {
+      padding: 10px;
+      text-align: center;
+      background: white;
+      font-weight: 500;
+    }
+    
+    /* Estilos para tipografía */
+    .typography-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .typography-option {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 20px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .typography-option:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .typography-option.selected {
+      border-color: var(--primary);
+      background: rgba(196, 155, 102, 0.05);
+    }
+    
+    .typography-title {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    
+    .typography-body {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .typography-name {
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+      font-weight: 500;
+      text-align: center;
+    }
+    
+    /* Clases de fuentes */
+    .playfair-title {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .montserrat-title {
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .dancing-title {
+      font-family: 'Dancing Script', cursive;
+    }
+    
+    .oswald-title {
+      font-family: 'Oswald', sans-serif;
+    }
+    
+    .roboto-body {
+      font-family: 'Roboto', sans-serif;
+    }
+    
+    .raleway-body {
+      font-family: 'Raleway', sans-serif;
+    }
+    
+    .poppins-body {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Estilos para pregunta de registro de marca */
+    .brand-reg-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .brand-reg-option {
+      padding: 20px 30px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      flex: 1;
+      max-width: 200px;
+    }
+    
+    .brand-reg-option:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .brand-reg-option.selected {
+      border-color: var(--primary);
+      background: rgba(196, 155, 102, 0.1);
+    }
+    
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -454,6 +625,19 @@
       .nav-btn {
         width: 100%;
       }
+      
+      .color-palette-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .typography-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .brand-reg-container {
+        flex-direction: column;
+        align-items: center;
+      }
     }
     
     @media (max-width: 480px) {
@@ -482,6 +666,10 @@
         padding: 12px 20px;
         font-size: 0.95rem;
       }
+      
+      .typography-title {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -489,7 +677,7 @@
 <div class="quiz-container">
   <div class="quiz-header">
     <h1><i class="fas fa-spa"></i> Manual de Identidad para Salones</h1>
-    <p>Define la identidad única de tu salón de belleza en 20 preguntas</p>
+    <p>Define la identidad única de tu salón de belleza en 23 preguntas</p>
   </div>
   
   <div class="quiz-content">
@@ -509,7 +697,7 @@
     <div class="progress-container">
       <div class="progress-info">
         <span id="currentQuestion">Pregunta 1</span>
-        <span id="totalQuestions">de 20</span>
+        <span id="totalQuestions">de 23</span>
       </div>
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
@@ -528,10 +716,11 @@
     {title: "Fundamentos", icon: "fas fa-drafting-compass"},
     {title: "Público", icon: "fas fa-users"},
     {title: "Estrategias", icon: "fas fa-chess-knight"},
-    {title: "Marketing", icon: "fas fa-bullhorn"}
+    {title: "Marketing", icon: "fas fa-bullhorn"},
+    {title: "Identidad Visual", icon: "fas fa-palette"}
   ];
 
-  // Preguntas del cuestionario (sin las eliminadas)
+  // Preguntas del cuestionario (con las nuevas funcionalidades)
   const questions = [
     {section: 0, q: "¿Cuál es la misión de tu salón?", name: "mision", hint: "Describe tu razón de ser. Ejemplo: Realzar la belleza y confianza de nuestros clientes en un ambiente personalizado."},
     {section: 0, q: "¿Cuál es la visión a futuro?", name: "vision", hint: "Imagina tu salón en 5 años. Ejemplo: Ser el referente nacional por calidad y confianza en nuestros servicios."},
@@ -559,7 +748,68 @@
     {section: 3, q: "¿Qué tipo de contenido publicarías en redes?", name: "contenido", options: ["Antes y después: Mostrar transformaciones", "Historias de clientes: Experiencias reales", "Tips de cuidado: Enseñar algo útil", "Detrás de cámaras: Mostrar el proceso"], multi: true},
     {section: 3, q: "¿Cómo recogerás testimonios de clientes?", name: "testimonios", hint: "Ej: Fotos con su permiso, pequeñas entrevistas, mensajes."},
     {section: 3, q: "¿Qué promociones o fidelización aplicarías?", name: "fidelizacion", hint: "Ej: Programa de referidos, descuentos por cliente frecuente."},
-    {section: 3, q: "¿Qué meta te gustaría alcanzar en redes en 6 meses?", name: "meta_redes", hint: "Ej: 500 seguidores fieles que interactúen contigo."}
+    {section: 3, q: "¿Qué meta te gustaría alcanzar en redes en 6 meses?", name: "meta_redes", hint: "Ej: 500 seguidores fieles que interactúen contigo."},
+    
+    // Nueva sección: Identidad Visual
+    {section: 4, q: "Selecciona una paleta de colores para tu marca", name: "paleta_colores", type: "color-palette"},
+    {section: 4, q: "Elige una combinación tipográfica para tu marca", name: "tipografia", type: "typography"},
+    {section: 4, q: "¿Tienes registrada tu marca legalmente?", name: "marca_registrada", options: ["Sí, ya está registrada", "No, pero planeo hacerlo pronto", "No, y no tengo planes de hacerlo"], multi: false}
+  ];
+
+  // Paletas de colores predefinidas
+  const colorPalettes = [
+    {
+      name: "Elegante y Clásico",
+      colors: ["#2c3e50", "#e74c3c", "#ecf0f1", "#bdc3c7", "#7f8c8d"]
+    },
+    {
+      name: "Fresco y Natural",
+      colors: ["#27ae60", "#2ecc71", "#f1c40f", "#d35400", "#16a085"]
+    },
+    {
+      name: "Moderno y Vibrante",
+      colors: ["#9b59b6", "#3498db", "#e74c3c", "#f39c12", "#1abc9c"]
+    },
+    {
+      name: "Suave y Relajante",
+      colors: ["#f1a9a0", "#dcc6e0", "#a2ded0", "#87d37c", "#f4d03f"]
+    },
+    {
+      name: "Lujo y Sofisticación",
+      colors: ["#1a1a1a", "#d4af37", "#c0c0c0", "#800020", "#f5f5f5"]
+    }
+  ];
+
+  // Opciones tipográficas
+  const typographyOptions = [
+    {
+      name: "Elegante",
+      titleClass: "playfair-title",
+      bodyClass: "roboto-body",
+      title: "Salón Belleza Elegante",
+      body: "Ofrecemos servicios de alta calidad con un toque de sofisticación. Nuestros estilistas expertos crean looks que realzan tu belleza natural."
+    },
+    {
+      name: "Moderno",
+      titleClass: "montserrat-title",
+      bodyClass: "roboto-body",
+      title: "Salón Belleza Moderna",
+      body: "Innovación y estilo definen nuestros servicios. Utilizamos las últimas técnicas y productos para resultados espectaculares."
+    },
+    {
+      name: "Creativo",
+      titleClass: "dancing-title",
+      bodyClass: "poppins-body",
+      title: "Salón Creativo",
+      body: "Donde la imaginación se encuentra con la técnica. Creamos looks únicos que reflejan tu personalidad y estilo."
+    },
+    {
+      name: "Profesional",
+      titleClass: "oswald-title",
+      bodyClass: "raleway-body",
+      title: "Salón Profesional",
+      body: "Expertos en belleza con años de experiencia. Ofrecemos resultados consistentes y de alta calidad para cada cliente."
+    }
   ];
 
   // Variables globales
@@ -632,8 +882,56 @@
         <div class="answer-container">
     `;
     
-    // Campo de respuesta
-    if (question.options) {
+    // Campo de respuesta según el tipo de pregunta
+    if (question.type === "color-palette") {
+      // Pregunta de paleta de colores
+      html += `<div class="color-palette-container">`;
+      
+      colorPalettes.forEach(palette => {
+        const isSelected = answers[question.name] === palette.name;
+        
+        html += `
+          <div class="color-palette ${isSelected ? 'selected' : ''}" data-value="${palette.name}">
+            <div class="color-row">
+        `;
+        
+        palette.colors.forEach(color => {
+          html += `
+            <div class="color-item" style="background-color: ${color};">
+              <span class="color-code">${color}</span>
+            </div>
+          `;
+        });
+        
+        html += `
+            </div>
+            <div class="palette-name">${palette.name}</div>
+          </div>
+        `;
+      });
+      
+      html += `</div>`;
+    } 
+    else if (question.type === "typography") {
+      // Pregunta de tipografía
+      html += `<div class="typography-container">`;
+      
+      typographyOptions.forEach(option => {
+        const isSelected = answers[question.name] === option.name;
+        
+        html += `
+          <div class="typography-option ${isSelected ? 'selected' : ''}" data-value="${option.name}">
+            <div class="typography-title ${option.titleClass}">${option.title}</div>
+            <div class="typography-body ${option.bodyClass}">${option.body}</div>
+            <div class="typography-name">${option.name}</div>
+          </div>
+        `;
+      });
+      
+      html += `</div>`;
+    } 
+    else if (question.options) {
+      // Pregunta con opciones múltiples
       html += `<div class="options-container">`;
       
       question.options.forEach((option, index) => {
@@ -655,6 +953,7 @@
       
       html += `</div>`;
     } else {
+      // Pregunta de texto abierto
       html += `<textarea id="answer" placeholder="Escribe tu respuesta aquí...">${answers[question.name] || ''}</textarea>`;
     }
     
@@ -671,8 +970,43 @@
     
     quizElement.innerHTML = html;
     
-    // Configurar eventos para las opciones
-    if (question.options) {
+    // Configurar eventos según el tipo de pregunta
+    if (question.type === "color-palette") {
+      // Eventos para paletas de colores
+      document.querySelectorAll('.color-palette').forEach(palette => {
+        palette.addEventListener('click', () => {
+          const value = palette.getAttribute('data-value');
+          answers[question.name] = value;
+          
+          // Quitar selección de otras paletas
+          document.querySelectorAll('.color-palette').forEach(other => {
+            other.classList.remove('selected');
+          });
+          
+          // Seleccionar esta paleta
+          palette.classList.add('selected');
+        });
+      });
+    } 
+    else if (question.type === "typography") {
+      // Eventos para opciones tipográficas
+      document.querySelectorAll('.typography-option').forEach(option => {
+        option.addEventListener('click', () => {
+          const value = option.getAttribute('data-value');
+          answers[question.name] = value;
+          
+          // Quitar selección de otras opciones
+          document.querySelectorAll('.typography-option').forEach(other => {
+            other.classList.remove('selected');
+          });
+          
+          // Seleccionar esta opción
+          option.classList.add('selected');
+        });
+      });
+    } 
+    else if (question.options) {
+      // Eventos para opciones normales
       document.querySelectorAll('.option-item').forEach(item => {
         item.addEventListener('click', () => {
           const value = item.getAttribute('data-value');
@@ -726,7 +1060,7 @@
 
   nextBtn.addEventListener('click', () => {
     // Guardar respuesta para campos de texto
-    if (!questions[currentQuestion].options) {
+    if (!questions[currentQuestion].options && !questions[currentQuestion].type) {
       const answerInput = document.getElementById('answer');
       if (answerInput) {
         answers[questions[currentQuestion].name] = answerInput.value;
